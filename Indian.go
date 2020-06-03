@@ -1,4 +1,4 @@
-package main
+package gospace
 
 import (
 	"fmt"
@@ -92,16 +92,3 @@ func CreateServer(port string) *Indian {
 		Handler: handler,
 	}
 }
-
-func main() {}
-
-// func main() {
-// 	server := CreateServer(":8080")
-// 	server.Handler.AddRoute("/", "GET", func(w http.ResponseWriter, r *http.Request) {
-// 		io.WriteString(w, "Hello world")
-// 	})
-// 	server.Handler.AddRoute("/hola", "GET", func(w http.ResponseWriter, r *http.Request) {
-// 		io.WriteString(w, "Hola x2")
-// 	})
-// 	server.Start()
-// }
