@@ -1,4 +1,4 @@
-package gospace
+package main
 
 import (
 	"fmt"
@@ -92,6 +92,8 @@ func CreateServer(port string) *Indian {
 		Handler: handler,
 	}
 }
+
+func main() {}
 
 // func main() {
 // 	server := CreateServer(":8080")
