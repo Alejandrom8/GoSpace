@@ -1,7 +1,8 @@
-package gospace
+package entities
 
 import (
 	"fmt"
+	typedef "gospace/src/types"
 	"net/http"
 )
 
@@ -13,7 +14,7 @@ se debe componer de los siguientes datos:
 	[ruta][metodo] funcion manejadora
 */
 type Handler struct {
-	Router map[string]map[string]func(http.ResponseWriter, *http.Request)
+	Router map[string]map[string]typedef.MiddleWare
 }
 
 /*ServeHTTP - principal manejador de las peticiones
@@ -41,7 +42,7 @@ func (h *Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 func (h *Handler) AddRoute(path string, method string, handler func(http.ResponseWriter, *http.Request)) bool {
 	if _, pathExists := h.Router[path]; !pathExists { // si no existe la ruta
 		// se crea el espacio en memoria para esta
-		h.Router[path] = make(map[string]func(http.ResponseWriter, *http.Request))
+		h.Router[path] = make(map[string]typedef.MiddleWare)
 	}
 
 	if _, methodExists := h.Router[path][method]; !methodExists { //si no existe el método
@@ -54,41 +55,6 @@ func (h *Handler) AddRoute(path string, method string, handler func(http.Respons
 	return false
 }
 
-/*Indian - estructura que funge como el principal manejador del server.
-Sirve como una colección de rutas y servidor. Se debe referenciar a esta
-estructura siempre que se quiera interactuar con el servidor.
-@prop {string} Port - el puerto en el que iniciara el servidor.
-@prop {*http.Server} Server - el servidor de la aplicación.
-@prop {*Handler} Handler - el manejador de peticiones y rutas del servidor.
-*/
-type Indian struct {
-	Port    string
-	Server  *http.Server
-	Handler *Handler
-}
+// func (h *Handler) AddMidleware(m typedef.MiddleWare) {
 
-/*Start - inicia el servidor
- */
-func (i *Indian) Start() {
-	fmt.Printf("Server ready and listening at port: %s", i.Port)
-	i.Server.ListenAndServe()
-}
-
-/*CreateServer - crea y configura una instancia de Indian
-@param {string} port - el puerto donde escuchará el servidor, ejemplo: ":8080"
-@return {*Indian} una instancia de Indian
-*/
-func CreateServer(port string) *Indian {
-	handler := &Handler{
-		Router: make(map[string]map[string]func(http.ResponseWriter, *http.Request)),
-	}
-
-	return &Indian{
-		Port: port,
-		Server: &http.Server{
-			Addr:    port,
-			Handler: handler,
-		},
-		Handler: handler,
-	}
-}
+// }
